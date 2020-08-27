@@ -27,7 +27,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.feeds.R;
+import com.project.feeds.entity.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     GoogleSignInClient gsi;
+    FirebaseFirestore firebaseFirestore;
 
     private String TAG = "LoginActivity";
     private int CODE_SIGN_IN = 1;
@@ -156,12 +159,25 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser firebaseUser){
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(account != null){
+            firebaseUser = mAuth.getCurrentUser();
+            String userId = firebaseUser.getUid();
             String personName = account.getDisplayName();
             String personGivenName = account.getGivenName();
             String personFamilyName = account.getFamilyName();
             String email = account.getEmail();
             String idUser = account.getId();
             Uri photoUser = account.getPhotoUrl();
+            User user = new User(userId,personGivenName.toLowerCase(),email,"",photoUser.toString(),"",personName);
+            mAuth = FirebaseAuth.getInstance();
+            firebaseFirestore = FirebaseFirestore.getInstance();
+            firebaseFirestore.collection("users").document(userId).set(user)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(LoginActivity.this, "Data Tersimpan di Database", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
 //            Toast.makeText(this, personName, Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

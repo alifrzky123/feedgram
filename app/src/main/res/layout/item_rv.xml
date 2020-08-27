@@ -37,7 +37,6 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerInside"
             android:id="@+id/iv_post_images"
             android:src="@drawable/ic_launcher_background" />
 
@@ -50,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/iv_like"
-                android:src="@drawable/hati" />
+                android:src="@drawable/ic_baseline_home_24" />
 
             <ImageView
                 android:layout_width="30dp"

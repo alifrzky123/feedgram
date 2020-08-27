@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void showPosts(){
+    public void  showPosts(){
         CollectionReference reference = FirebaseFirestore.getInstance().collection("photos");
         reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

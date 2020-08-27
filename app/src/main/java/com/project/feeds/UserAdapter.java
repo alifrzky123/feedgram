@@ -61,7 +61,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.btnFollow.getText().toString().equals("follow")) {
+                if (holder.btnFollow.getText().toString().equals("Follow")) {
+
+                    Toast.makeText(context, mUser.getEmail(), Toast.LENGTH_SHORT).show();
                     Map<String, Object> dataFollowing = new HashMap<>();
                     dataFollowing.put(user.getId(), true);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();

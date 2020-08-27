@@ -132,9 +132,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                assert value != null;
+                //assert value != null;
                 User user = value.toObject(User.class);
-                assert user != null;
+                //assert user != null;
                 Glide.with(context).load(user.getPhotoUrl()).into(ivPhotoProfile);
                 tvUserName.setText(user.getUserName());
                 tvUploader.setText(user.getFullName());

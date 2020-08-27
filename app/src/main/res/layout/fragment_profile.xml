@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iv_pro_pict"
-                android:text="Edit Profile"/>
+                android:text="Set Your Profile"/>
                 <RelativeLayout
                     android:layout_below="@+id/btn_update_profile"
                     android:layout_width="match_parent"

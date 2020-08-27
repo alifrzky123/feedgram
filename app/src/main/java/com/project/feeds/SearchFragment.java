@@ -78,7 +78,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void searchAcc(String key){
-        CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
+        CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("users");
         collectionReference.whereEqualTo("userName", key).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
