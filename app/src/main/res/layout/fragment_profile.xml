@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ProfileFragment"
+    android:padding="15dp">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/bar_profile">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:id="@+id/toolbar_profile">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv_log_out"
+                    android:src="@drawable/ic_baseline_double_arrow_24"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp" />
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="700dp"
+            android:layout_below="@id/bar_profile">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_pro_pict"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:src="@drawable/ic_launcher_background"/>
+            <TextView
+                android:id="@+id/tv_total_posts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10 Posts"
+                android:textStyle="bold"
+                android:layout_above="@+id/btn_update_profile"
+                android:layout_toRightOf="@+id/iv_pro_pict"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:id="@+id/tv_total_followers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10 Followers"
+                android:layout_above="@+id/btn_update_profile"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/tv_total_posts"
+                android:layout_centerInParent="true"/>
+            <TextView
+                android:id="@+id/tv_total_followings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_update_profile"
+                android:text="10 Following"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/tv_total_followers"
+                android:layout_centerInParent="true"/>
+            <TextView
+                android:id="@+id/tv_pro_uname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_toRightOf="@+id/iv_pro_pict"/>
+            <TextView
+                android:id="@+id/tv_bio_pro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bio"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_below="@+id/tv_pro_uname"
+                android:layout_toRightOf="@id/iv_pro_pict"
+                android:layout_marginLeft="10dp"/>
+
+            <Button
+                android:id="@+id/btn_update_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_pro_pict"
+                android:text="Edit Profile"/>
+                <RelativeLayout
+                    android:layout_below="@+id/btn_update_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/relative_container">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/rv_list_container"/>
+                </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+</RelativeLayout>

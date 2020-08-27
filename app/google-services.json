@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "171298291508",
+    "firebase_url": "https://feedgram-e410f.firebaseio.com",
+    "project_id": "feedgram-e410f",
+    "storage_bucket": "feedgram-e410f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171298291508:android:534e655715b53824ffaf61",
+        "android_client_info": {
+          "package_name": "com.project.feeds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171298291508-7itp71bcrgq9d84j15cubrtlm1ar87ld.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiPRMxXvGRH4E919UuENUnOHErwc1C8FM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171298291508-7itp71bcrgq9d84j15cubrtlm1ar87ld.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
