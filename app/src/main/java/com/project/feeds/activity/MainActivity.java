@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.project.feeds.AddActivity;
+import com.project.feeds.CommentAdapter;
 import com.project.feeds.SearchFragment;
 import com.project.feeds.fragment.HomeFragment;
 import com.project.feeds.fragment.LikeFragment;
@@ -23,6 +26,8 @@ import com.project.feeds.R;
 import com.project.feeds.fragment.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String DATA = "PREF_UID";
+    public static final String KEY = "profileId";
     BottomNavigationView bottomNavigationView;
     FirebaseAuth mAuth;
     FirebaseUser firebaseUser;
@@ -41,6 +46,21 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+
+        Bundle i = getIntent().getExtras();
+        if (i!=null){
+            String uploader = i.getString(CommentAdapter.ID_PUBLISHER);
+            SharedPreferences.Editor editor = getSharedPreferences(DATA,MODE_PRIVATE).edit();
+            editor.putString(KEY,uploader);
+            editor.apply();
+            Fragment fragment = null;
+            fragment = new ProfileFragment();
+            getFragmentPage(fragment);
+        }else{
+            Fragment fragment = null;
+            fragment = new HomeFragment();
+            getFragmentPage(fragment);
+        }
     }
 
     private void bottomNavbar(){
@@ -57,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, AddActivity.class));
                         break;
                     case R.id.nav_profil :
+                        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = getSharedPreferences(DATA, MODE_PRIVATE).edit();
+                        editor.putString(KEY, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        editor.apply();
                         fragment = new ProfileFragment();
                         break;
                     case R.id.nav_liked_post :

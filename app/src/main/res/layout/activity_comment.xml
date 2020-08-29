@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CommentActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar_comment"
+        android:background="@color/colorPrimary" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rv_comment"
+        android:layout_below="@id/toolbar_comment"
+        android:layout_above="@id/bottom_comment_rl" />
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_comment_rl"
+        android:background="#fff"
+        android:padding="4dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:civ_border_overlay="true"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/colorAccent"
+            android:id="@+id/iv_pp_comment" />
+
+        <EditText
+            android:layout_toRightOf="@id/iv_pp_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Writes Your Comment Down Here"
+            android:id="@+id/et_add_comment"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="10dp"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/tv_add_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kirim"
+            android:textColor="@color/colorPrimaryDark" />
+    </RelativeLayout>
+
+</RelativeLayout>

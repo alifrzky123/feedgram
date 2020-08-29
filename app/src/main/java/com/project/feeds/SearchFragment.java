@@ -104,7 +104,7 @@ public class SearchFragment extends Fragment {
                             for (DocumentSnapshot snapshot : value){
                                 User user = snapshot.toObject(User.class);
                                 userList.add(user);
-                                Toast.makeText(getContext(), "Data Berhasil Masuk", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Data Berhasil Masuk", Toast.LENGTH_SHORT).show();
                             }
                             userAdapter.notifyDataSetChanged();
                         }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
@@ -62,7 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.tvDesk.setVisibility(View.VISIBLE);
             holder.tvDesk.setText(post.getPostDesc());
         }
-        UploadInfo(holder.ivProfile,holder.tvUname,holder.tvUploader,post.getUploadId());
+        UploadInfo(holder.ivProfile,holder.tvUname,holder.tvUploader,post.getPostUploader());
         LikedPost(post.getUploadId(),holder.ivLike);
         Likers(holder.tvTotalLike,post.getUploadId());
         getComments(post.getUploadId(),holder.tvComment);
@@ -70,38 +72,39 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.ivLike.getTag().equals("sukai")) {
+                if (holder.ivLike.getTag().equals("Like")) {
+                    Toast.makeText(context, "Like", Toast.LENGTH_SHORT).show();
                     Map<String, Object> data = new HashMap<>();
                     data.put(firebaseUser.getUid(), true);
-                    FirebaseFirestore.getInstance().collection("suka")
+                    FirebaseFirestore.getInstance().collection("likes")
                             .document(post.getUploadId()).set(data);
 
-                    //addNotifikasi(postingan.getPengapload(), postingan.getIdupload());
                 } else {
-                    FirebaseFirestore.getInstance().collection("suka")
+                    Toast.makeText(context, "Unlike", Toast.LENGTH_SHORT).show();
+                    FirebaseFirestore.getInstance().collection("likes")
                             .document(post.getUploadId()).delete();
                 }
             }
         });
-//        holder.ivComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(context, CommentActivity.class);
-//                intent.putExtra(CommentActivity.ID_POST, post.getUploadId());
-//                intent.putExtra(CommentActivity.ID_PUBLISHER,post.getPostUploader());
-//                context.startActivity(intent);
-//            }
-//        });
+        holder.ivComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                intent.putExtra(CommentActivity.ID_POST, post.getUploadId());
+                intent.putExtra(CommentActivity.ID_PUBLISHER,post.getPostUploader());
+                context.startActivity(intent);
+            }
+        });
 
-//        holder.tvComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(context,CommentActivity.class);
-//                intent.putExtra(CommentActivity.ID_POST,post.getUploadId());
-//                intent.putExtra(CommentAdapter.ID_PUBLISHER,post.getPostUploader());
-//                context.startActivity(intent);
-//            }
-//        });
+        holder.tvComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,CommentActivity.class);
+                intent.putExtra(CommentActivity.ID_POST,post.getUploadId());
+                intent.putExtra(CommentAdapter.ID_PUBLISHER,post.getPostUploader());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -132,26 +135,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                //assert value != null;
+                assert value != null;
                 User user = value.toObject(User.class);
-                //assert user != null;
-                Glide.with(context).load(user.getPhotoUrl()).into(ivPhotoProfile);
-                tvUserName.setText(user.getUserName());
-                tvUploader.setText(user.getFullName());
+                if (user != null) {
+                    Glide.with(context).load(user.getPhotoUrl()).into(ivPhotoProfile);
+                    tvUserName.setText(user.getUserName());
+                    tvUploader.setText(user.getFullName());
+                }
+                else {
+                    Toast.makeText(context, "Gagal memuat data", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     public void LikedPost(final String PostId, final ImageView ivPostImages){
-        DocumentReference reference = FirebaseFirestore.getInstance().collection("like").document(PostId);
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("likes").document(PostId);
         reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (value!=null && value.exists()){
-                    ivPostImages.setImageResource(R.drawable.ic_liked_images);
+                    ivPostImages.setImageResource(R.drawable.ic_baseline_emoji_emotions_pink_24);
                     ivPostImages.setTag("Liked");
                 }else{
-                    ivPostImages.setImageResource(R.drawable.hati);
+                    ivPostImages.setImageResource(R.drawable.ic_baseline_emoji_emotions_24);
                     ivPostImages.setTag("Like");
                 }
             }
@@ -159,18 +166,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public void Likers(final TextView tvLiked, final String postId){
-        DocumentReference reference = FirebaseFirestore.getInstance().collection("like").document(postId);
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("likes").document(postId);
         reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 int total = 0;
                 try{
-                    total = value.getData().size();
+                    assert value != null;
+                    total = Objects.requireNonNull(value.getData()).size();
                 }catch (NullPointerException n){
                     n.printStackTrace();
                 }
                 if (value.exists()){
-                    String textLike = total + "Liked";
+                    String textLike = total + " Liked";
                     tvLiked.setText(textLike);
                 }
             }
@@ -189,7 +197,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 for (DocumentSnapshot snapshot : value) {
                     id.add(snapshot.getId());
                 }
-                String textComment = id.size() + "Commented";
+                Toast.makeText(context, String.valueOf(id.size()), Toast.LENGTH_SHORT).show();
+                String textComment = id.size() + " Commented";
                 tvComment.setText(textComment);
             }
         });
