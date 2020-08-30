@@ -1,4 +1,4 @@
-package com.project.feeds;
+package com.project.feeds.adapter;
 
 import android.content.Context;
 import android.view.View;

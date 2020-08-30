@@ -1,6 +1,7 @@
-package com.project.feeds;
+package com.project.feeds.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +22,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.project.feeds.R;
+import com.project.feeds.activity.MainActivity;
 import com.project.feeds.entity.User;
+import com.project.feeds.fragment.ProfileFragment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +90,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 }
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = context.getSharedPreferences(MainActivity.DATA, Context.MODE_PRIVATE).edit();
+                editor.putString(MainActivity.KEY,user.getId());
+                editor.apply();
+
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.rv_container, new ProfileFragment()).commit();
+            }
+        });
     }
 
     @Override
@@ -105,10 +120,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
     private void isFollowing(final String userId, final Button button, final String following){
         FirebaseFirestore instance = FirebaseFirestore.getInstance();
-//        DocumentReference reference = instance.collection("follow")
-//                .document(following)
-//                .collection("following")
-//                .document(userId);
         DocumentReference reference = instance.collection("follow")
                 .document(following)
                 .collection("following")

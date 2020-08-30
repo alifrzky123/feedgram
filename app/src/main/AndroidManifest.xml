@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CommentActivity"></activity>
-        <activity android:name=".SetUpProfile" />
-        <activity android:name=".AddActivity" />
+        <activity android:name=".activity.CommentActivity"></activity>
+        <activity android:name=".activity.SetUpProfile" />
+        <activity android:name=".activity.AddActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

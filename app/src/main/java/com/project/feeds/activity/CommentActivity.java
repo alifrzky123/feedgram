@@ -1,4 +1,4 @@
-package com.project.feeds;
+package com.project.feeds.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,21 +13,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.project.feeds.R;
+import com.project.feeds.adapter.CommentAdapter;
 import com.project.feeds.entity.Comment;
+import com.project.feeds.entity.Notification;
 import com.project.feeds.entity.User;
 
 import java.util.ArrayList;
@@ -97,12 +98,14 @@ public class CommentActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance()
                 .collection("comments")
                 .document(postId)
-                .collection(FirebaseFirestore.getInstance().collection("comments").getId())
+                .collection(postId)
                 .add(comment)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         Toast.makeText(CommentActivity.this, "Comment Berhasil Di Kirim", Toast.LENGTH_SHORT).show();
+                        addNotif();
+                        etComment.setText("");
                     }
                 });
     }
@@ -124,12 +127,18 @@ public class CommentActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         assert value != null;
-                        for (DocumentChange change : value.getDocumentChanges()){
-                            Comment comment = change.getDocument().toObject(Comment.class);
+                        for (DocumentSnapshot snapshot : value){
+                            Comment comment = snapshot.toObject(Comment.class);
                             commentList.add(comment);
                         }
                         commentAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+    public void addNotif(){
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("notification")
+                .document(publisherId);
+        Notification notification = new Notification(mUser.getUid(),etComment.getText().toString(),true,postId);
+        reference.set(notification);
     }
 }

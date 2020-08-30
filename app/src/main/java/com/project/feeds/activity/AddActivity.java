@@ -1,4 +1,4 @@
-package com.project.feeds;
+package com.project.feeds.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
-import com.project.feeds.activity.MainActivity;
+import com.project.feeds.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;

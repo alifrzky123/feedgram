@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,14 +40,19 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.project.feeds.adapter.PhotoAdapter;
 import com.project.feeds.R;
-import com.project.feeds.SetUpProfile;
+import com.project.feeds.activity.SetUpProfile;
 import com.project.feeds.activity.LoginActivity;
 import com.project.feeds.activity.MainActivity;
+import com.project.feeds.entity.Notification;
 import com.project.feeds.entity.Post;
 import com.project.feeds.entity.User;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +64,9 @@ public class ProfileFragment extends Fragment {
     private ImageView ivPhotoProfile, ivLogOut;
     private TextView tvUname, tvBio, tvPost, tvFollowing, tvFollowers;
     private Button btnEditProfile;
+    RecyclerView recyclerView;
+    PhotoAdapter photoAdapter;
+    List<Post> postList;
     FirebaseAuth mAuth;
     FirebaseUser firebaseUser;
     GoogleSignInClient googleSignInClient;
@@ -79,6 +90,7 @@ public class ProfileFragment extends Fragment {
             checkFollow();
         }
 
+
         ivPhotoProfile = v.findViewById(R.id.iv_pro_pict);
         ivLogOut = v.findViewById(R.id.iv_log_out);
         tvUname = v.findViewById(R.id.tv_pro_uname);
@@ -87,7 +99,14 @@ public class ProfileFragment extends Fragment {
         tvFollowers = v.findViewById(R.id.tv_total_followers);
         tvFollowing = v.findViewById(R.id.tv_total_followings);
         btnEditProfile = v.findViewById(R.id.btn_update_profile);
+        recyclerView = v.findViewById(R.id.rv_list_container);
 
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(getContext(),3);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        postList = new ArrayList<>();
+        photoAdapter = new PhotoAdapter(getContext(),postList);
+        recyclerView.setAdapter(photoAdapter);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -120,9 +139,10 @@ public class ProfileFragment extends Fragment {
                 alert.create().show();
             }
         });
-        getDataFollowers(firebaseUser.getUid());
-        getNrPostingan();
-        getUserInfo(firebaseUser.getUid());
+        getDataFollowers(profileId);
+        getTotalPosts();
+        getUserInfo(profileId);
+        getPhotos();
 
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +180,7 @@ public class ProfileFragment extends Fragment {
                                     }
                                 }
                             });
-                    //addNotifikasi();
+                    addNotif();
                 } else if (textButton.equals("mengikuti")) {
                     Map<String, Object> dataFollowing = new HashMap<>();
                     dataFollowing.put(profileId, true);
@@ -277,7 +297,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getNrPostingan() {
+    private void getTotalPosts() {
         CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("photos");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -294,5 +314,25 @@ public class ProfileFragment extends Fragment {
                 tvPost.setText(i + " Posts");
             }
         });
+    }
+    public void getPhotos(){
+        FirebaseFirestore.getInstance().collection("photos")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        for (DocumentSnapshot snapshot : value){
+                            Post post = snapshot.toObject(Post.class);
+                            if (post.getPostUploader().equals(profileId)){
+                                postList.add(post);
+                            }
+                        }
+                        Collections.reverse(postList);
+                        photoAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+    public void addNotif(){
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("notification").document(profileId);
+        Notification notification = new Notification(firebaseUser.getUid(),"Following",true,"");
     }
 }
