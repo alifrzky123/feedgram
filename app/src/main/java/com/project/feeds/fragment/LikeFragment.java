@@ -51,7 +51,7 @@ public class LikeFragment extends Fragment {
     }
 
     public void readNotif(){
-        FirebaseFirestore.getInstance().collection("notifications")
+        FirebaseFirestore.getInstance().collection("notification")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

@@ -3,7 +3,7 @@ package com.project.feeds.entity;
 public class Notification {
     String userId;
     String text;
-    Boolean isPost;
+    boolean isPost;
     String idUploader;
 
     public Notification (){}
@@ -22,7 +22,7 @@ public class Notification {
         return text;
     }
 
-    public Boolean getPost() {
+    public boolean getPost() {
         return isPost;
     }
 

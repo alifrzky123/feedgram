@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,13 +44,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Notification notification = notificationList.get(position);
+        Toast.makeText(context, notification.getText(), Toast.LENGTH_SHORT).show();
         holder.tvText.setText(notification.getText());
         getUser(holder.ivPPNotif,holder.tvUname,notification.getUserId());
-
-        if (notification.getPost()){
+        if (notification.getPost() == false){
+            Toast.makeText(context, "ada", Toast.LENGTH_SHORT).show();
             holder.ivPostNotif.setVisibility(View.VISIBLE);
             getPostedImages(holder.ivPostNotif,notification.getIdUploader());
         }else{
+
+            Toast.makeText(context, "tidak ada", Toast.LENGTH_SHORT).show();
             holder.ivPostNotif.setVisibility(View.GONE);
         }
 

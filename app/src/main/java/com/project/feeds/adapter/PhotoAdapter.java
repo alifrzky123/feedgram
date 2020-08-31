@@ -16,6 +16,7 @@ import com.project.feeds.activity.CommentActivity;
 import com.project.feeds.R;
 import com.project.feeds.activity.MainActivity;
 import com.project.feeds.entity.Post;
+import com.project.feeds.fragment.DetailFragment;
 import com.project.feeds.fragment.LikeFragment;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 SharedPreferences.Editor editor = context.getSharedPreferences(MainActivity.DATA,Context.MODE_PRIVATE).edit();
                 editor.putString(CommentActivity.ID_POST,post.getUploadId());
                 editor.apply();
-                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.rv_container, new LikeFragment()).commit();
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.rv_container, new DetailFragment()).commit();
 
             }
         });
